@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Penilaian Sumatif Akhir Semester - SMK GUNA DHARMA NUSANTARA</title>
+    <link rel="icon" type="image/x-icon" href="logo1.png" />
+    <style>
+      * {
+        margin: 0 auto;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        color: #000;
+        line-height: 1.6;
+        text-decoration: none;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        width: 97%;
+        border-radius: 8px;
+      }
+      header {
+        text-align: center;
+        padding: 30px 0;
+        background-color: #fff;
+        color: white;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      header h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+
+      header h2 {
+        font-size: 22px;
+        margin-bottom: 10px;
+        color: #e97f4a;
+      }
+
+      header p {
+        font-size: 18px;
+      }
+
+      .classes-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 30px;
+      }
+
+      .class-card {
+        flex: 1;
+        min-width: 300px;
+        max-width: 350px;
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      .class-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .class-card h3 {
+        font-size: 24px;
+        color: #434e78;
+        margin-bottom: 15px;
+      }
+
+      .class-card p {
+        color: #666;
+        font-size: 16px;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        overflow-y: auto;
+      }
+
+      .modal-content {
+        position: relative;
+        background-color: white;
+        margin: 50px auto;
+        padding: 0;
+        width: 90%;
+        max-width: 800px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        animation: modalFadeIn 0.3s ease-out;
+      }
+
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-header {
+        padding: 20px 30px;
+        background-color: #e97f4a;
+        color: white;
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-header h3 {
+        font-size: 24px;
+        margin: 0;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 28px;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background-color 0.2s;
+      }
+
+      .close-btn:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .modal-body {
+        padding: 30px;
+        max-height: 70vh;
+        overflow-y: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+      }
+
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      th {
+        background-color: #f0f0f0;
+        font-weight: 600;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      a {
+        color: #000;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      a:hover {
+        color: #ff6600;
+        text-decoration: underline;
+      }
+      .dropdown {
+        display: inline-block;
+        position: relative;
+      }
+      button {
+        border: none;
+        cursor: pointer;
+      }
+      .dropdown-option {
+        display: none;
+        position: absolute;
+        overflow: auto;
+      }
+
+      /* Dropdown Button */
+      .dropbtn {
+        background-color: white;
+        color: #000;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+      }
+
+      /* Dropdown button on hover & focus */
+      .dropbtn:hover,
+      .dropbtn:focus {
+        background-color: #e97f4a;
+        color: white;
+      }
+
+      /* The container <div> - needed to position the dropdown content */
+      .dropdown {
+        position: relative;
+        display: inline-block;
+      }
+
+      /* Dropdown Content (Hidden by Default) */
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+      }
+
+      /* Links inside the dropdown */
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+
+      /* Change color of dropdown links on hover */
+      .dropdown-content a:hover {
+        background-color: #ddd;
+      }
+
+      /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+      .show {
+        display: block;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        padding: 20px;
+        color: #000;
+        font-size: 14px;
+      }
+
+      @media (max-width: 768px) {
+        .classes-container {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .class-card {
+          min-width: 100%;
+          max-width: 100%;
+        }
+
+        .modal-content {
+          width: 95%;
+          margin: 20px auto;
+        }
+
+        .modal-body {
+          padding: 20px;
+          max-height: 80vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <img class="header" src="gdn.jpeg" alt="PSAS" id="header" />
+
+        <div class="classes-container">
+          <div class="class-card" onclick="openModal('kelasX')">
+            <h3>KAMIS</h3>
+            <h2>11 DESEMBER 2025</h2>
+            <p>Klik untuk melihat daftar mata ujian</p>
+          </div>
+
+          <div class="class-card" onclick="openModal('kelasXI')">
+            <h3>JUM'AT</h3>
+            <h2>12 DESEMBER 2025</h2>
+            <p>Klik untuk melihat daftar mata ujian</p>
+          </div>
+
+          <div class="class-card" onclick="openModal('kelasXII')">
+            <h3>SABTU</h3>
+            <h2>13 DESEMBER 2025</h2>
+            <p>Klik untuk melihat daftar mata ujian</p>
+          </div>
+
+          <div class="class-card" onclick="openModal('kelasXIII')">
+            <h3>SENIN</h3>
+            <h2>15 DESEMBER 2025</h2>
+            <p>Klik untuk melihat daftar mata ujian</p>
+          </div>
+
+          <div class="class-card" onclick="openModal('kelasXIIII')">
+            <h3>SELASA</h3>
+            <h2>16 DESEMBER 2025</h2>
+            <p>Klik untuk melihat daftar mata ujian</p>
+          </div>
+        </div>
+
+        <footer>
+          <p>©2025 SMK GUNA DHARMA NUSANTARA. Semua hak cipta dilindungi.</p>
+        </footer>
+      </header>
+    </div>
+
+    <!-- Modal untuk Kelas X -->
+    <div id="modalKelasX" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Daftar Mata Ujian</h3>
+          <button class="close-btn" onclick="closeModal('kelasX')">×</button>
+        </div>
+        <div class="modal-body">
+          <table>
+            <tbody>
+              <tr>
+                <th><center>Mata Pelajaran</center></th>
+              </tr>
+              <tr>
+                <td>
+                  <b><center>KAMIS</center></b>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://forms.gle/U9w56QEkTwRD74e46" target="_blank"
+                    >Pendidikan Agama Islam dan Budi Pekerti</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://forms.gle/VvWRUJGQ5j1e9VxP7" target="_blank"
+                    >Pendidikan Pancasila</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://forms.gle/4dUtk7hu2GWzVGG86" target="_blank"
+                    >Bahasa Indonesia</a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal untuk Kelas XI (isi sama, bisa disesuaikan nanti) -->
+    <div id="modalKelasXI" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Daftar Mata Ujian</h3>
+          <button class="close-btn" onclick="closeModal('kelasXI')">×</button>
+        </div>
+        <div class="modal-body">
+          <table>
+            <tbody>
+              <tr>
+                <th><center>Mata Pelajaran</center></th>
+              </tr>
+              <tr>
+                <td>
+                  <b><center>JUM'AT</center></b>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://forms.gle/xMWKAWkBWkZcwp5ZA" target="_blank"
+                    >PJOK</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://forms.gle/oNRiMKzAxN7cUeAP8" target="_blank"
+                    >Sejarah</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://forms.gle/D4xzi2esQJ93FQgq8" target="_blank"
+                    >Seni Musik</a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal untuk Kelas XII (isi sama, bisa disesuaikan nanti) -->
+    <div id="modalKelasXII" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Daftar Mata Ujian</h3>
+          <button class="close-btn" onclick="closeModal('kelasXII')">×</button>
+        </div>
+        <div class="modal-body">
+          <table>
+            <tbody>
+              <tr>
+                <th><center>Mata Ujian</center></th>
+              </tr>
+              <tr>
+                <td>
+                  <b><center>SABTU</center></b>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://forms.gle/YQvMeHo5NJM5mawJ9" target="_blank"
+                    >MATEMATIKA</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a
+                    href="https://forms.gle/BiPWzZpKFfT36f6HA"
+                    target="_blank"
+                  ></a
+                  >BAHASA INGGRIS
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a
+                    href="https://forms.gle/tuPrS9R9u4HYpdja6"
+                    target="_blank"
+                  ></a
+                  >INFORMATIKA
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal untuk Kelas XII (isi sama, bisa disesuaikan nanti) -->
+    <div id="modalKelasXIII" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Daftar Mata Ujian</h3>
+          <button class="close-btn" onclick="closeModal('kelasXIII')">×</button>
+        </div>
+        <div class="modal-body">
+          <table>
+            <tbody>
+              <tr>
+                <th><center>Mata Ujian</center></th>
+              </tr>
+              <tr>
+                <td>
+                  <b><center>SENIN</center></b>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://forms.gle/G7XHcDuLAf1RR4749" target="_blank"
+                    >Projek Ilmu Pengetahuan Alam Dan Sosial</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="dropdown">
+                    <button onclick="myFunction()" class="dropbtn">
+                      Dasar - Dasar Program Keahlian
+                    </button>
+                    <div id="myDropdown" class="dropdown-content">
+                      <a
+                        href="https://forms.gle/bnjzRCgBSXC3rbso7"
+                        target="_blank"
+                        >Dasar - Dasar Teknik Industri</a
+                      >
+                      <a
+                        href="https://forms.gle/aTS2BUdtb8cPhwNx8"
+                        target="_blank"
+                        >Dasar - Dasar Teknik Komputer Jaringan</a
+                      >
+                      <a
+                        href="https://forms.gle/r6CqCwCWG2zNEqBG7"
+                        target="_blank"
+                        >Dasar - Dasar Teknologi Farmasi</a
+                      >
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal untuk Kelas XII (isi sama, bisa disesuaikan nanti) -->
+    <div id="modalKelasXIIII" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Daftar Mata Ujian</h3>
+          <button class="close-btn" onclick="closeModal('kelasXIIII')">
+            ×
+          </button>
+        </div>
+        <div class="modal-body">
+          <table>
+            <tbody>
+              <tr>
+                <th><center>Mata Ujian</center></th>
+              </tr>
+              <tr>
+                <td>
+                  <b><center>SELASA</center></b>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://forms.gle/Z8L1WyfQku2aP4Hq5" target="_blank"
+                    >Koding Dan Kecerdasan Artifisial</a
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <a href="https://forms.gle/6zu747iHNSrytruA6" target="_blank"
+                    >Bahasa Sunda</a
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Fungsi untuk membuka modal
+      function openModal(kelas) {
+        document.getElementById(
+          `modal${kelas.charAt(0).toUpperCase() + kelas.slice(1)}`
+        ).style.display = "block";
+        document.body.style.overflow = "hidden"; // Mencegah scroll di body
+      }
+
+      // Fungsi untuk menutup modal
+      function closeModal(kelas) {
+        document.getElementById(
+          `modal${kelas.charAt(0).toUpperCase() + kelas.slice(1)}`
+        ).style.display = "none";
+        document.body.style.overflow = "auto"; // Mengembalikan scroll di body
+      }
+
+      // Menutup modal ketika mengklik di luar konten modal
+      window.onclick = function (event) {
+        if (event.target.classList.contains("modal")) {
+          event.target.style.display = "none";
+          document.body.style.overflow = "auto";
+        }
+      };
+
+      // Menutup modal dengan tombol Escape
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          const modals = document.getElementsByClassName("modal");
+          for (let modal of modals) {
+            if (modal.style.display === "block") {
+              modal.style.display = "none";
+              document.body.style.overflow = "auto";
+            }
+          }
+        }
+      });
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>
