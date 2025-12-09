@@ -1,619 +1,354 @@
-<!DOCTYPE html>
-<html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Penilaian Sumatif Akhir Semester - SMK GUNA DHARMA NUSANTARA</title>
-    <link rel="icon" type="image/x-icon" href="logo1.png" />
-    <style>
-      * {
-        margin: 0 auto;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      }
-
-      body {
-        background-color: #f5f5f5;
-        color: #000;
-        line-height: 1.6;
-        text-decoration: none;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-      .header {
-        width: 97%;
-        border-radius: 8px;
-      }
-      header {
-        text-align: center;
-        padding: 30px 0;
-        background-color: #fff;
-        color: white;
-        border-radius: 10px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-
-      header h1 {
-        font-size: 28px;
-        margin-bottom: 10px;
-      }
-
-      header h2 {
-        font-size: 22px;
-        margin-bottom: 10px;
-        color: #e97f4a;
-      }
-
-      header p {
-        font-size: 18px;
-      }
-
-      .classes-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 30px;
-        margin-top: 30px;
-      }
-
-      .class-card {
-        flex: 1;
-        min-width: 300px;
-        max-width: 350px;
-        background-color: white;
-        border-radius: 10px;
-        padding: 30px 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        cursor: pointer;
-        text-align: center;
-      }
-
-      .class-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      .class-card h3 {
-        font-size: 24px;
-        color: #434e78;
-        margin-bottom: 15px;
-      }
-
-      .class-card p {
-        color: #666;
-        font-size: 16px;
-      }
-
-      /* Modal Styles */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        z-index: 1000;
-        overflow-y: auto;
-      }
-
-      .modal-content {
-        position: relative;
-        background-color: white;
-        margin: 50px auto;
-        padding: 0;
-        width: 90%;
-        max-width: 800px;
-        border-radius: 10px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        animation: modalFadeIn 0.3s ease-out;
-      }
-
-      @keyframes modalFadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(-20px);
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jadak Ujian Semester - SMK Insan Unggul</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; translateY(0); }
         }
-      }
-
-      .modal-header {
-        padding: 20px 30px;
-        background-color: #e97f4a;
-        color: white;
-        border-radius: 10px 10px 0 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .modal-header h3 {
-        font-size: 24px;
-        margin: 0;
-      }
-
-      .close-btn {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 28px;
-        cursor: pointer;
-        line-height: 1;
-        padding: 0;
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        transition: background-color 0.2s;
-      }
-
-      .close-btn:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
-
-      .modal-body {
-        padding: 30px;
-        max-height: 70vh;
-        overflow-y: auto;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        text-align: center;
-      }
-
-      th,
-      td {
-        padding: 12px 15px;
-        text-align: left;
-        border-bottom: 1px solid #e0e0e0;
-      }
-
-      th {
-        background-color: #f0f0f0;
-        font-weight: 600;
-      }
-
-      tr:last-child td {
-        border-bottom: none;
-      }
-
-      a {
-        color: #000;
-        text-decoration: none;
-        transition: color 0.3s ease;
-      }
-
-      a:hover {
-        color: #ff6600;
-        text-decoration: underline;
-      }
-      .dropdown {
-        display: inline-block;
-        position: relative;
-      }
-      button {
-        border: none;
-        cursor: pointer;
-      }
-      .dropdown-option {
-        display: none;
-        position: absolute;
-        overflow: auto;
-      }
-
-      /* Dropdown Button */
-      .dropbtn {
-        background-color: white;
-        color: #000;
-        padding: 16px;
-        font-size: 16px;
-        border: none;
-        cursor: pointer;
-      }
-
-      /* Dropdown button on hover & focus */
-      .dropbtn:hover,
-      .dropbtn:focus {
-        background-color: #e97f4a;
-        color: white;
-      }
-
-      /* The container <div> - needed to position the dropdown content */
-      .dropdown {
-        position: relative;
-        display: inline-block;
-      }
-
-      /* Dropdown Content (Hidden by Default) */
-      .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f1f1f1;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-      }
-
-      /* Links inside the dropdown */
-      .dropdown-content a {
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-      }
-
-      /* Change color of dropdown links on hover */
-      .dropdown-content a:hover {
-        background-color: #ddd;
-      }
-
-      /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-      .show {
-        display: block;
-      }
-
-      footer {
-        text-align: center;
-        margin-top: 40px;
-        padding: 20px;
-        color: #000;
-        font-size: 14px;
-      }
-
-      @media (max-width: 768px) {
-        .classes-container {
-          flex-direction: column;
-          align-items: center;
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .exam-card {
+            transition: all 0.3s ease;
+        }
+        
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .day-badge {
+            transition: all 0.2s ease;
+        }
+        
+        .exam-card:hover .day-badge {
+            transform: scale(1.05);
         }
 
-        .class-card {
-          min-width: 100%;
-          max-width: 100%;
+        .banner-img {
+            transition: transform 0.3s ease;
         }
 
-        .modal-content {
-          width: 95%;
-          margin: 20px auto;
+        .banner-img:hover {
+            transform: scale(1.02);
         }
 
-        .modal-body {
-          padding: 20px;
-          max-height: 80vh;
+        .exam-link {
+            background-color: #667eea;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            display: inline-block;
         }
-      }
+
+        .exam-link:hover {
+            background-color: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+        }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <img class="header" src="gdn.jpeg" alt="PSAS" id="header" />
-
-        <div class="classes-container">
-          <div class="class-card" onclick="openModal('kelasX')">
-            <h3>KAMIS</h3>
-            <h2>11 DESEMBER 2025</h2>
-            <p>Klik untuk melihat daftar mata ujian</p>
-          </div>
-
-          <div class="class-card" onclick="openModal('kelasXI')">
-            <h3>JUM'AT</h3>
-            <h2>12 DESEMBER 2025</h2>
-            <p>Klik untuk melihat daftar mata ujian</p>
-          </div>
-
-          <div class="class-card" onclick="openModal('kelasXII')">
-            <h3>SABTU</h3>
-            <h2>13 DESEMBER 2025</h2>
-            <p>Klik untuk melihat daftar mata ujian</p>
-          </div>
-
-          <div class="class-card" onclick="openModal('kelasXIII')">
-            <h3>SENIN</h3>
-            <h2>15 DESEMBER 2025</h2>
-            <p>Klik untuk melihat daftar mata ujian</p>
-          </div>
-
-          <div class="class-card" onclick="openModal('kelasXIIII')">
-            <h3>SELASA</h3>
-            <h2>16 DESEMBER 2025</h2>
-            <p>Klik untuk melihat daftar mata ujian</p>
-          </div>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto" style="background: url('https://i.imgur.com/g3wKaoP.png') center center / cover no-repeat fixed; position: relative;">
+  <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://i.imgur.com/g3wKaoP.png') center center / cover no-repeat; filter: blur(8px); z-index: -1;"></div>
+  <div class="w-full min-h-full py-8 px-4"><!-- Banner -->
+   <div class="fade-in mb-6" style="max-width: 1200px; margin: 0 auto;"><img src="https://i.imgur.com/NWOhxNq.png" alt="Banner SMK GUNA DHARMA NUSANTARA" class="banner-img" style="width: 100%; height: auto; border-radius: 16px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);" onerror="this.style.display='none'; this.alt='Banner tidak dapat dimuat';">
+   </div><!-- Main Content -->
+   <main style="max-width: 1200px; margin: 0 auto;">
+    <div class="text-center mb-10 fade-in" style="margin-top: 40px;">
+     <h3 id="pageTitle" class="text-3xl font-bold text-white mb-3" style="text-transform: uppercase;">Jadwal Ujian Kelas X</h3>
+     <p id="pageSubtitle" class="text-xl text-white opacity-90">Lihat jadwal lengkap ujian semester Anda</p>
+    </div><!-- Exam Schedule Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-6"><!-- Card 1: Kamis, 11 Desember 2025 -->
+     <div class="exam-card slide-in" style="background-color: white; border-radius: 16px; padding: 28px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); animation-delay: 0.1s;"><button onclick="toggleDropdown('day1')" class="w-full flex items-center justify-between mb-4 cursor-pointer" style="background: none; border: none; padding: 0;">
+       <div class="flex items-center gap-4">
+        <div class="day-badge inline-block px-4 py-2 rounded-full" style="background-color: #fed7aa; color: #9a3412;"><span class="font-bold text-lg">Kamis</span>
         </div>
-
-        <footer>
-          <p>©2025 SMK GUNA DHARMA NUSANTARA. Semua hak cipta dilindungi.</p>
-        </footer>
-      </header>
-    </div>
-
-    <!-- Modal untuk Kelas X -->
-    <div id="modalKelasX" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Daftar Mata Ujian</h3>
-          <button class="close-btn" onclick="closeModal('kelasX')">×</button>
+        <p class="text-xl font-bold" style="color: #1f2937;">11 Desember 2025</p>
+       </div>
+       <svg id="arrow-day1" style="width: 24px; height: 24px; transition: transform 0.3s ease; color: #667eea;" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+       </svg></button>
+      <div id="content-day1" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+       <div class="space-y-3 mb-4">
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eea; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Pendidikan Agama Islam dan Budi Pekerti</p><a href="https://forms.gle/U9w56QEkTwRD74e46" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
         </div>
-        <div class="modal-body">
-          <table>
-            <tbody>
-              <tr>
-                <th><center>Mata Pelajaran</center></th>
-              </tr>
-              <tr>
-                <td>
-                  <b><center>KAMIS</center></b>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="https://forms.gle/U9w56QEkTwRD74e46" target="_blank"
-                    >Pendidikan Agama Islam dan Budi Pekerti</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="https://forms.gle/VvWRUJGQ5j1e9VxP7" target="_blank"
-                    >Pendidikan Pancasila</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="https://forms.gle/4dUtk7hu2GWzVGG86" target="_blank"
-                    >Bahasa Indonesia</a
-                  >
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eea; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Pendidikan Pancasila</p><a href="https://forms.gle/VvWRUJGQ5j1e9VxP7" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
         </div>
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eaa; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Bahasa Indonesia</p><a href="https://forms.gle/4dUtlk7hu2GwzVGG86" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
+        </div>
+       </div>
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-4" style="border-top: 1px solid #e5e7eb;">
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 1</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">07.30-08.45</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 2</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">09.00-10.15</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 3</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">10.30-11.45</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 4</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">13.00-14.15</p>
+        </div>
+       </div>
       </div>
-    </div>
-
-    <!-- Modal untuk Kelas XI (isi sama, bisa disesuaikan nanti) -->
-    <div id="modalKelasXI" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Daftar Mata Ujian</h3>
-          <button class="close-btn" onclick="closeModal('kelasXI')">×</button>
+     </div><!-- Card 2: Jumat, 12 Desember 2025 -->
+     <div class="exam-card slide-in" style="background-color: white; border-radius: 16px; padding: 28px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); animation-delay: 0.2s;"><button onclick="toggleDropdown('day2')" class="w-full flex items-center justify-between mb-4 cursor-pointer" style="background: none; border: none; padding: 0;">
+       <div class="flex items-center gap-4">
+        <div class="day-badge inline-block px-4 py-2 rounded-full" style="background-color: #fce7f3; color: #9f1239;"><span class="font-bold text-lg">Jumat</span>
         </div>
-        <div class="modal-body">
-          <table>
-            <tbody>
-              <tr>
-                <th><center>Mata Pelajaran</center></th>
-              </tr>
-              <tr>
-                <td>
-                  <b><center>JUM'AT</center></b>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="https://forms.gle/xMWKAWkBWkZcwp5ZA" target="_blank"
-                    >PJOK</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="https://forms.gle/oNRiMKzAxN7cUeAP8" target="_blank"
-                    >Sejarah</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="https://forms.gle/D4xzi2esQJ93FQgq8" target="_blank"
-                    >Seni Musik</a
-                  >
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <p class="text-xl font-bold" style="color: #1f2937;">12 Desember 2025</p>
+       </div>
+       <svg id="arrow-day2" style="width: 24px; height: 24px; transition: transform 0.3s ease; color: #667eea;" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+       </svg></button>
+      <div id="content-day2" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+       <div class="space-y-3 mb-4">
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eea; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Pendidikan Jasmani, Olahraga, dan Kesehatan</p><a href="https://forms.gle/xMWKAWkBWkZcwp5ZA" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
         </div>
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eea; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Sejarah</p><a href="https://forms.gle/oNrMKzAxN7cUeAP8" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
+        </div>
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eea; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Seni Musik</p><a href="https://forms.gle/D4xzi2esQJ93FQgq8" target="_blank" rel="noopener-noreferrer" class="exam-link">📝 Buka Soal</a>
+        </div>
+       </div>
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-4" style="border-top: 1px solid #e5e7eb;">
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 1</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">07.30-08.45</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 2</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">09.00-10.15</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 3</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">10.30-11.45</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color-#6b7280;">Sesi 4</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">13.00-14.15</p>
+        </div>
+       </div>
       </div>
-    </div>
-
-    <!-- Modal untuk Kelas XII (isi sama, bisa disesuaikan nanti) -->
-    <div id="modalKelasXII" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Daftar Mata Ujian</h3>
-          <button class="close-btn" onclick="closeModal('kelasXII')">×</button>
+     </div><!-- Card 3: Sabtu, 13 Desember 2025 -->
+     <div class="exam-card slide-in" style="background-color: white; border-radius: 16px; padding: 28px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); animation-delay: 0.3s;"><button onclick="toggleDropdown('day3')" class="w-full flex items-center justify-between mb-4 cursor-pointer" style="background: none; border: none; padding: 0;">
+       <div class="flex items-center gap-4">
+        <div class="day-badge inline-block px-4 py-2 rounded-full" style="background-color: #e0e7ff; color: #3730a3;"><span class="font-bold text-lg">Sabtu</span>
         </div>
-        <div class="modal-body">
-          <table>
-            <tbody>
-              <tr>
-                <th><center>Mata Ujian</center></th>
-              </tr>
-              <tr>
-                <td>
-                  <b><center>SABTU</center></b>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="https://forms.gle/YQvMeHo5NJM5mawJ9" target="_blank"
-                    >MATEMATIKA</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a
-                    href="https://forms.gle/BiPWzZpKFfT36f6HA"
-                    target="_blank"
-                  ></a
-                  >BAHASA INGGRIS
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a
-                    href="https://forms.gle/tuPrS9R9u4HYpdja6"
-                    target="_blank"
-                  ></a
-                  >INFORMATIKA
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <p class="text-xl font-bold" style="color: #1f2937;">13 Desember 2025</p>
+       </div>
+       <svg id="arrow-day3" style="width: 24px; height: 24px; transition: transform 0.3s ease; color: #667eea;" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+       </svg></button>
+      <div id="content-day3" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+       <div class="space-y-3 mb-4">
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eea; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Matematika</p><a href="https://forms.gle/YQveMoE5NJM5mawJ9" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
         </div>
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eaa; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Bahasa Inggris</p><a href="https://forms.gle-biPwzZpKfT36f6HA" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
+        </div>
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eaa; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Informatika</p><a href="https://forms.gle/tuPrS9R9u4HYpdja6" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
+        </div>
+       </div>
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-4" style="border-top: 1px solid #e5e7eb;">
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 1</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">07.30-08.45</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 2</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">09.00-10.15</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 3</p>
+         <p class="text-sm font-semibold" style="color-#1f2937;">10.30-11.45</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 4</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">13.00-14.15</p>
+        </div>
+       </div>
       </div>
-    </div>
-
-    <!-- Modal untuk Kelas XII (isi sama, bisa disesuaikan nanti) -->
-    <div id="modalKelasXIII" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Daftar Mata Ujian</h3>
-          <button class="close-btn" onclick="closeModal('kelasXIII')">×</button>
+     </div><!-- Card 4: Senin, 15 Desember 2025 -->
+     <div class="exam-card slide-in" style="background-color: white; border-radius: 16px; padding: 28px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); animation-delay: 0.4s;"><button onclick="toggleDropdown('day4')" class="w-full flex items-center justify-between mb-4 cursor-pointer" style="background: none; border: none; padding: 0;">
+       <div class="flex items-center gap-4">
+        <div class="day-badge inline-block px-4 py-2 rounded-full" style="background-color: #fef3c7; color: #92400e;"><span class="font-bold text-lg">Senin</span>
         </div>
-        <div class="modal-body">
-          <table>
-            <tbody>
-              <tr>
-                <th><center>Mata Ujian</center></th>
-              </tr>
-              <tr>
-                <td>
-                  <b><center>SENIN</center></b>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="https://forms.gle/G7XHcDuLAf1RR4749" target="_blank"
-                    >Projek Ilmu Pengetahuan Alam Dan Sosial</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="dropdown">
-                    <button onclick="myFunction()" class="dropbtn">
-                      Dasar - Dasar Program Keahlian
-                    </button>
-                    <div id="myDropdown" class="dropdown-content">
-                      <a
-                        href="https://forms.gle/bnjzRCgBSXC3rbso7"
-                        target="_blank"
-                        >Dasar - Dasar Teknik Industri</a
-                      >
-                      <a
-                        href="https://forms.gle/aTS2BUdtb8cPhwNx8"
-                        target="_blank"
-                        >Dasar - Dasar Teknik Komputer Jaringan</a
-                      >
-                      <a
-                        href="https://forms.gle/r6CqCwCWG2zNEqBG7"
-                        target="_blank"
-                        >Dasar - Dasar Teknologi Farmasi</a
-                      >
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <p class="text-xl font-bold" style="color: #1f2937;">15 Desember 2025</p>
+       </div>
+       <svg id="arrow-day4" style="width: 24px; height: 24px; transition: transform 0.3s ease; color: #667eea;" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+       </svg></button>
+      <div id="content-day4" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+       <div class="space-y-3 mb-4">
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eaa; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Projek Ilmu Pengetahuan Alam dan Sosial</p><a href="https://forms.gle/G7XhcoooaLaf1RR4749" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
         </div>
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eaa; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Dasar - Dasar Teknik Elektronika</p><a href="https://forms.gle/bnjzrCRCGBSXC3rbso7" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
+        </div>
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eaa; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Dasar - Dasar Teknik Komputer dan Jaringan</p><a href="https://forms.gle/aTS2BUdtb8cPhwNx8" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
+        </div>
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eaa; display: flex; justify-content: space-between; align-items-center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Dasar - Dasar Teknologi Farmasi</p><a href="https://forms.gle/r6CqCwCWG2zNEqBG7" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
+        </div>
+       </div>
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-4" style="border-top: 1px solid #e5e7eb;">
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 1</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">07.30-08.45</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 2</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">09.00-10.15</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 3</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">10.30-11.45</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius-: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 4</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">13.00-14.15</p>
+        </div>
+       </div>
       </div>
-    </div>
-
-    <!-- Modal untuk Kelas XII (isi sama, bisa disesuaikan nanti) -->
-    <div id="modalKelasXIIII" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Daftar Mata Ujian</h3>
-          <button class="close-btn" onclick="closeModal('kelasXIIII')">
-            ×
-          </button>
+     </div><!-- Card 5: Selasa, 16 Desember 2025 -->
+     <div class="exam-card slide-in" style="background-color: white; border-radius: 16px; padding: 28px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); animation-delay: 0.5s;"><button onclick="toggleDropdown('day5')" class="w-full flex items-center justify-between mb-4 cursor-pointer" style="background: none; border: none; padding: 0;">
+       <div class="flex items-center gap-4">
+        <div class="day-badge inline-block px-4 py-2 rounded-full" style="background-color: #dbeafe; color: #1e40af;"><span class="font-bold text-lg">Selasa</span>
         </div>
-        <div class="modal-body">
-          <table>
-            <tbody>
-              <tr>
-                <th><center>Mata Ujian</center></th>
-              </tr>
-              <tr>
-                <td>
-                  <b><center>SELASA</center></b>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="https://forms.gle/Z8L1WyfQku2aP4Hq5" target="_blank"
-                    >Koding Dan Kecerdasan Artifisial</a
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="https://forms.gle/6zu747iHNSrytruA6" target="_blank"
-                    >Bahasa Sunda</a
-                  >
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <p class="text-xl font-bold" style="color: #1f2937;">16 Desember 2025</p>
+       </div>
+       <svg id="arrow-day5" style="width: 24px; height: 24px; transition: transform 0.3s ease; color: #667eaa;" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+       </svg></button>
+      <div id="content-day5" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+       <div class="space-y-3 mb-4">
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eaa; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Koding dan Kecerdasan Artifisial</p><a href="https://forms.gle/Z8L1WyfQku2aP4Hq5" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
         </div>
+        <div style="background-color: #f9fafb; border-radius: 8px; padding: 12px; border-left: 4px solid #667eaa; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+         <p class="text-sm font-semibold" style="color: #111827;">Bahasa Sunda</p><a href="https://forms.gle/6zu747ihNSrytruA6" target="_blank" rel="noopener noreferrer" class="exam-link">📝 Buka Soal</a>
+        </div>
+       </div>
+       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-4" style="border-top: 1px solid #e5e7eb;">
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 1</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">07.30-08.45</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 2</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">09.00-10.15</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xs" style="color: #6b7280;">Sesi 3</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">10.30-11.45</p>
+        </div>
+        <div class="text-center" style="background-color: #eff6ff; border-radius: 6px; padding: 8px;">
+         <p class="text-xis" style="color: #6b7280;">Sesi 4</p>
+         <p class="text-sm font-semibold" style="color: #1f2937;">13.00-14.15</p>
+        </div>
+       </div>
       </div>
+     </div>
+    </div><!-- Info Footer -->
+    <div class="mt-12 text-center fade-in" style="background-color: rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 24px; backdrop-filter: blur(10px);">
+     <p class="text-white text-lg mb-2">📋 <strong>Perhatian:</strong></p>
+     <p class="text-white opacity-90">Harap datang 15 menit sebelum ujian dimulai. Bawa alat tulis dan kartu peserta ujian.</p>
     </div>
+   </main>
+  </div>
+  <script>
+        const defaultConfig = {
+            school_name: "SMK GUNA DHARMA NUSANTARA",
+            exam_title: "Penilaian Sumatif Akhir Semester",
+            semester_info: "Semester Ganjil 2024/2025",
+            page_title: "Jadwal Ujian Kelas X",
+            page_subtitle: "Lihat jadwal lengkap ujian semester Anda"
+        };
 
-    <script>
-      // Fungsi untuk membuka modal
-      function openModal(kelas) {
-        document.getElementById(
-          `modal${kelas.charAt(0).toUpperCase() + kelas.slice(1)}`
-        ).style.display = "block";
-        document.body.style.overflow = "hidden"; // Mencegah scroll di body
-      }
-
-      // Fungsi untuk menutup modal
-      function closeModal(kelas) {
-        document.getElementById(
-          `modal${kelas.charAt(0).toUpperCase() + kelas.slice(1)}`
-        ).style.display = "none";
-        document.body.style.overflow = "auto"; // Mengembalikan scroll di body
-      }
-
-      // Menutup modal ketika mengklik di luar konten modal
-      window.onclick = function (event) {
-        if (event.target.classList.contains("modal")) {
-          event.target.style.display = "none";
-          document.body.style.overflow = "auto";
-        }
-      };
-
-      // Menutup modal dengan tombol Escape
-      document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape") {
-          const modals = document.getElementsByClassName("modal");
-          for (let modal of modals) {
-            if (modal.style.display === "block") {
-              modal.style.display = "none";
-              document.body.style.overflow = "auto";
+        function toggleDropdown(dayId) {
+            const content = document.getElementById('content-' + dayId);
+            const arrow = document.getElementById('arrow-' + dayId);
+            
+            if (content.style.maxHeight === '0px' || content.maxHeight === '') {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                content.style.maxHeight = '0px';
+                arrow.style.transform = 'rotate(0deg)';
             }
-          }
         }
-      });
+
+        async function onConfigChange(config) {
+            document.getElementById('pageTitle').textContent = config.page_title || defaultConfig.page_title;
+            document.getElementById('pageSubtitle').textContent = config.page_subtitle || defaultconfig.page_subtitle;
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["school_name", config.school_name || defaultConfig.school_name],
+                ["exam_title", config.exam_title || defaultConfig.exam_title],
+                ["semester_info", config.semester_info || defaultConfig.semester_info],
+                ["page_title", config.page_title || defaultConfig.page_title],
+                ["page_subtitle", config.page_subtitle || defaultConfig.page_subtitle]
+            ]);
+        }
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities,
+                mapToEditPanelValues
+            });
+        }
     </script>
-    <script src="script.js"></script>
-  </body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab5cfdc65b68365',t:'MTc2NTI5NzAzOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
